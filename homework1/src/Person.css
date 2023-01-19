@@ -1,0 +1,11 @@
+.person {
+  display: inline-block;
+  border: 1px solid black!important;
+  margin: 300px 20px;
+}
+
+button {
+  height: 30px;
+  width: 150px;
+  margin: 30px;
+}
