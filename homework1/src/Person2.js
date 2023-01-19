@@ -10,7 +10,6 @@ class Person2 extends Component {
   }
 
   hidePerson = () => {
-    console.log(this.state.textHidden);
     this.setState({ textHidden: !this.state.textHidden });
   };
 

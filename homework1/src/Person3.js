@@ -9,8 +9,7 @@ class Person3 extends Component {
     };
   }
 
-  changePerson = () => {
-    console.log(this.state.textHidden);
+  hidePerson = () => {
     this.setState({ textHidden: !this.state.textHidden });
   };
 
@@ -18,7 +17,7 @@ class Person3 extends Component {
     return (
       <div className="person">
         <p hidden={this.state.textHidden}>Name: Stepan, age: 25</p>
-        <button onClick={this.changePerson}>
+        <button onClick={this.hidePerson}>
           {this.state.textHidden ? "Show" : "Hide"}
         </button>
       </div>
