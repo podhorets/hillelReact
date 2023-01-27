@@ -1,0 +1,22 @@
+.post {
+    display: inline-block;
+    max-width: 50%;
+    border: groove;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.body, .title, .button {
+    display: block;
+}
+
+.title {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.button {
+    float: right;
+    margin: 10px 5px 5px 0px;
+}
