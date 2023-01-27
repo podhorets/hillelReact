@@ -13,7 +13,9 @@ class Post extends Component {
 
   componentDidUpdate(props, state) {
     if (state.title !== this.state.title) {
-      console.log(`title was changed from '${state.title}' to '${this.state.title}'.`);
+      console.log(
+        `title was changed from '${state.title}' to '${this.state.title}'.`
+      );
     }
   }
 
@@ -23,25 +25,24 @@ class Post extends Component {
 
   editTitle = (updatedTitle) => {
     fetch(`https://jsonplaceholder.typicode.com/posts/${this.props.id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify({
         id: this.props.id,
         userId: this.props.userId,
         title: updatedTitle,
-        body: this.props.body
+        body: this.props.body,
       }),
       headers: {
-        'Content-type': 'application/json; charset=UTF-8',
+        "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("HTTP PUT call was successful.");
-          this.setState({ title: updatedTitle });
-        }
-      });
+    }).then((response) => {
+      if (response.ok) {
+        console.log("HTTP PUT call was successful.");
+        this.setState({ title: updatedTitle });
+      }
+    });
   };
-  
+
   showModal = () => {
     this.setState({ modalEnabled: true });
   };
@@ -57,7 +58,10 @@ class Post extends Component {
       <div className="post">
         <span className="title">{this.state.title}</span>
         <span className="body">{this.props.body}</span>
-        <button className="button" onClick={() => this.props.deletePost(this.props.id)}>
+        <button
+          className="button"
+          onClick={() => this.props.deletePost(this.props.id)}
+        >
           Delete post
         </button>
         <button className="button" onClick={this.showModal}>

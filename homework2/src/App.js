@@ -1,5 +1,5 @@
-import './App.css';
-import Post from './components/Post/Post';
+import "./App.css";
+import Post from "./components/Post/Post";
 import { Component } from "react";
 
 class App extends Component {
@@ -8,7 +8,7 @@ class App extends Component {
     this.state = {
       posts: [],
       loading: true,
-      error: null
+      error: null,
     };
   }
 
@@ -17,8 +17,8 @@ class App extends Component {
   }
 
   componentDidUpdate(props, state) {
-    console.log('Posts number before update: ' + state.posts.length);
-    console.log('Posts number after update: ' + this.state.posts.length);
+    console.log("Posts number before update: " + state.posts.length);
+    console.log("Posts number after update: " + this.state.posts.length);
   }
 
   fetchPosts() {
@@ -32,27 +32,28 @@ class App extends Component {
         return response.json();
       })
       .then((posts) => {
-        this.setState({posts: posts, error: null});
+        this.setState({ posts: posts, error: null });
       })
       .catch((err) => {
-        this.setState({posts: null, error: err.message});
+        this.setState({ posts: null, error: err.message });
       })
       .finally(() => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       });
   }
 
   deletePost = (id) => {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("HTTP DELETE call was successful.");
-          this.setState({posts: this.state.posts.filter(post => post.id !== id)});
-        }
-      });
-  }
+      method: "DELETE",
+    }).then((response) => {
+      if (response.ok) {
+        console.log("HTTP DELETE call was successful.");
+        this.setState({
+          posts: this.state.posts.filter((post) => post.id !== id),
+        });
+      }
+    });
+  };
 
   render() {
     return (
@@ -64,9 +65,16 @@ class App extends Component {
         )}
         <ul>
           {this.state.posts &&
-            this.state.posts.map(post => 
-              <Post key={post.id.toString()} id={post.id} userId={post.userId} title={post.title} body={post.body} deletePost={this.deletePost} />
-            )}
+            this.state.posts.map((post) => (
+              <Post
+                key={post.id.toString()}
+                id={post.id}
+                userId={post.userId}
+                title={post.title}
+                body={post.body}
+                deletePost={this.deletePost}
+              />
+            ))}
         </ul>
       </div>
     );
