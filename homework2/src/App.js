@@ -42,7 +42,7 @@ class App extends Component {
       });
   }
 
-  updatePosts = (id) => {
+  deletePost = (id) => {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: 'DELETE',
     })
@@ -65,7 +65,7 @@ class App extends Component {
         <ul>
           {this.state.posts &&
             this.state.posts.map(post => 
-              <Post key={post.id.toString()} id={post.id} userId={post.userId} title={post.title} body={post.body} updatePosts={this.updatePosts} />
+              <Post key={post.id.toString()} id={post.id} userId={post.userId} title={post.title} body={post.body} deletePost={this.deletePost} />
             )}
         </ul>
       </div>

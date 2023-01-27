@@ -10,7 +10,7 @@ class Post extends Component {
       title: props.title,
     };
   }
-  
+
   componentDidUpdate(props, state) {
     if (state.title !== this.state.title) {
       console.log(`title was changed from '${state.title}' to '${this.state.title}'.`);
@@ -57,7 +57,7 @@ class Post extends Component {
       <div className="post">
         <span className="title">{this.state.title}</span>
         <span className="body">{this.props.body}</span>
-        <button className="button" onClick={() => this.props.updatePosts(this.props.id)}>
+        <button className="button" onClick={() => this.props.deletePost(this.props.id)}>
           Delete post
         </button>
         <button className="button" onClick={this.showModal}>
