@@ -3,7 +3,6 @@ import "./Post.css";
 
 class Post extends PureComponent {
   render() {
-    console.log("render post " + this.props.id);
     return (
       <div className="post">
         <span className="title">{this.props.title}</span>
