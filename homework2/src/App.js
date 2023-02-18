@@ -1,5 +1,6 @@
 import "./App.css";
 import Post from "./components/Post/Post";
+import EditModal from "./components/EditModal/EditModal";
 import { Component } from "react";
 
 class App extends Component {
@@ -7,18 +8,15 @@ class App extends Component {
     super();
     this.state = {
       posts: [],
+      selectedPost: null,
       loading: true,
       error: null,
+      modalEnabled: false,
     };
   }
 
   componentDidMount() {
     this.fetchPosts();
-  }
-
-  componentDidUpdate(props, state) {
-    console.log("Posts number before update: " + state.posts.length);
-    console.log("Posts number after update: " + this.state.posts.length);
   }
 
   fetchPosts() {
@@ -47,12 +45,42 @@ class App extends Component {
       method: "DELETE",
     }).then((response) => {
       if (response.ok) {
-        console.log("HTTP DELETE call was successful.");
-        this.setState({
-          posts: this.state.posts.filter((post) => post.id !== id),
-        });
+        this.setState({ posts: this.state.posts.filter(post => post.id !== id) });
       }
     });
+  };
+
+  editPost = (id) => {
+    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: this.state.selectedPost.id,
+        userId: this.state.selectedPost.userId,
+        title: this.state.selectedPost.updatedTitle,
+        body: this.state.selectedPost.body,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.ok) {
+        const posts = this.state.posts;
+        const index = posts.findIndex(post => post.id === id);
+        posts[index] = this.state.selectedPost;
+        this.setState({ posts: posts, selectedPost: null, modalEnabled: false });
+      }
+    });
+  };
+
+  updateTitle = (updatedTitle) => {
+    const selectedPost = this.state.selectedPost;
+    selectedPost.title = updatedTitle;
+    this.setState({ selectedPost: selectedPost });
+  }
+
+  showModal = (id) => {
+    const index = this.state.posts.findIndex(post => post.id === id)
+    this.setState({ modalEnabled: true, selectedPost: this.state.posts[index] });
   };
 
   render() {
@@ -64,18 +92,27 @@ class App extends Component {
           <div>{`There is a problem fetching the post data - ${this.state.error}`}</div>
         )}
         <ul>
-          {this.state.posts &&
+          {this.state.posts.length &&
             this.state.posts.map((post) => (
               <Post
-                key={post.id.toString()}
+                key={post.id}
                 id={post.id}
                 userId={post.userId}
                 title={post.title}
                 body={post.body}
                 deletePost={this.deletePost}
+                showModal={this.showModal}
               />
             ))}
         </ul>
+        {this.state.modalEnabled && (
+          <EditModal
+            id={this.state.selectedPost.id}
+            title={this.state.selectedPost.title}
+            updateTitle={this.updateTitle}
+            editPost={this.editPost}
+          />
+        )}
       </div>
     );
   }
