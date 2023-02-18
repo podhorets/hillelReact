@@ -9,14 +9,6 @@ export const Popular = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
-  // TODO: Виталик, у Tab есть свойство css 'aria-selected:bg-[#d0021b]' (выделение цветом выбраного Tab'a)
-  // При выборе Tab и перезагрузке страницы:
-  //    сначала в currentTabIndex сетится 0 в useState (default value),
-  //    затем выполняется useEffect и сетится currentTabIndex с URL (query param)
-  //    как следствие сначала подсвечивается на 1 сек 0ая Tab'a, затем подсвечивается выбранная Tab'a
-  // как можно переиграть это, чтобы подсвечивалась сразу нужная таба?
-  // по факту useEffect будет выполняться только когда currentTabIndex измениться или изначально засетится в useState
-  // единственный вариант тогда переделывать логику css ?
   useEffect(() => {
     for (const entry of Array.from(searchParams.entries())) {
       const [param, value] = entry;
