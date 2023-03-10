@@ -7,4 +7,9 @@
       @apply rounded-lg px-5 py-3 text-sm 
       flex items-center justify-center space-x-2 bg-gray-700/70 hover:bg-gray-800/70 cursor-pointer text-white transition-all duration-200 ease-out
   }
+
+  .button {
+    @apply my-4 mx-auto py-1 block text-center w-36 rounded text-base border-none bg-[#0a0a0a] text-[#e6e6e6]
+    hover:bg-gradient-to-r from-[#1a1a1a] to-[#0a0a0a] cursor-pointer
+  }
 } 

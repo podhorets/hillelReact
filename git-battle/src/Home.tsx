@@ -7,10 +7,7 @@ export const Home = () => {
       <h1 className="text-2xl font-bold">
         GitHub Battle: battle your friends... and stuff
       </h1>
-      <Link
-        to={"/" + RoutePath.Battle}
-        className="m-5 w-36 border-gray-700 border chatRow"
-      >
+      <Link to={"/" + RoutePath.Battle} className="m-5 w-36 button">
         Battle
       </Link>
     </div>
