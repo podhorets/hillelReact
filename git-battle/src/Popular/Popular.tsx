@@ -2,7 +2,7 @@ import { debounce } from "lodash";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchRepositoriesByLanguage, fetchRepositoriesByName } from "../api";
-import { Repository } from "../RepositoryModel";
+import { Repository } from "../models";
 import { Languages } from "./Languages";
 import { Repos } from "./Repos";
 

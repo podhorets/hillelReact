@@ -26,10 +26,10 @@ export const PlayerInput = ({ index, onSubmit }: PlayerInputProps) => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        <button className="button" disabled={!username}>
+          Submit
+        </button>
       </form>
-      <button className="button" disabled={!username}>
-        Submit
-      </button>
     </div>
   );
 };
