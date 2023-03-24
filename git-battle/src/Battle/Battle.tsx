@@ -57,10 +57,8 @@ export const Battle = () => {
         <Link
           to={{
             pathname: `/${RoutePath.Battle}/${RoutePath.Results}`,
-            search: `?players=${players
-              .map((player) => player.username)
-              .join("/")}`,
           }}
+          state={players.map((player) => player.username)}
           className="button  text-center ml-40"
         >
           Battle

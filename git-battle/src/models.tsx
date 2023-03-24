@@ -8,6 +8,13 @@ export interface Repository {
 
 export interface Profile {
   followers: number;
+  following: string;
+  login: string;
+  name: string;
+  blog: string;
+  location: string;
+  public_repos: string;
+  public_gists: string;
 }
 
 export interface Owner {

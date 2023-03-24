@@ -6,7 +6,7 @@ import { RoutePath } from "./RoutePath";
 import { Nav } from "./Nav";
 import { Popular } from "./Popular/Popular";
 import { Battle } from "./Battle/Battle";
-import Results from "./Results";
+import Results from "./Battle/Results";
 
 function App() {
   return (
