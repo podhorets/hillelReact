@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RoutePath } from "../RoutePath";
+import {
+  handleResetAction,
+  handleSubmitAction,
+} from "../state/battle/battle.actions";
+import { PlayerState } from "../state/battle/battle.reducer";
 import { PlayerInput } from "./PlayerInput";
 import { PlayerPreview } from "./PlayerPreview";
 
@@ -10,25 +15,14 @@ export interface Player {
 }
 
 export const Battle = () => {
-  const [players, setPlayers] = useState<Player[]>([
-    { username: "", avatar: "" },
-    { username: "", avatar: "" },
-  ]);
+  const dispatch = useDispatch();
+
+  const players = useSelector(
+    (state: { battleReducer: PlayerState }) => state.battleReducer.players
+  );
 
   const handleSubmit = (index: number, username: string) => {
-    const playersToUpdate = [...players];
-    playersToUpdate[index].username = username;
-    playersToUpdate[
-      index
-    ].avatar = `https://github.com/${username}.png?size=200`;
-    setPlayers(playersToUpdate);
-  };
-
-  const handleReset = (index: number) => {
-    const playersToUpdate = [...players];
-    playersToUpdate[index].username = "";
-    playersToUpdate[index].avatar = "";
-    setPlayers(playersToUpdate);
+    dispatch(handleSubmitAction({ index, username }));
   };
 
   return (
@@ -43,7 +37,7 @@ export const Battle = () => {
               />
               <button
                 className="pt-3 text-sm text-[#d0021b]"
-                onClick={() => handleReset(index)}
+                onClick={() => dispatch(handleResetAction(index))}
               >
                 Reset
               </button>

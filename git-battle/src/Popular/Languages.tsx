@@ -1,25 +1,24 @@
-import { Dispatch, SetStateAction } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { memo } from "react";
+import { setLanguageAction } from "../state/popular/popular.actions";
+import { PopularState } from "../state/popular/popular.reducer";
 
-interface LanguagesProps {
-  selectedLanguage: string;
-  languages: string[];
-  setSearchParams: Dispatch<SetStateAction<URLSearchParams>>;
-}
+const languages = ["All", "Javascript", "Ruby", "Java", "CSS", "Python"];
 
-export const Languages = ({
-  selectedLanguage,
-  languages,
-  setSearchParams,
-}: LanguagesProps) => {
+export const Languages = memo(() => {
+  const dispatch = useDispatch();
+  const selectedLanguage = useSelector(
+    (state: { popularReducer: PopularState }) =>
+      state.popularReducer.selectedLanguage
+  );
+
   return (
     <ul className="flex flex-row">
       {languages.map((language, index) => (
         <li
           key={index}
           className="px-6 py-2 rounded-lg border-none transition-all duration-200 ease-out"
-          onClick={() =>
-            setSearchParams(new URLSearchParams({ language: language }))
-          }
+          onClick={() => dispatch(setLanguageAction(language))}
         >
           <span
             className={`${
@@ -34,4 +33,4 @@ export const Languages = ({
       ))}
     </ul>
   );
-};
+});

@@ -1,71 +1,58 @@
 import { debounce } from "lodash";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchRepositoriesByLanguage, fetchRepositoriesByName } from "../api";
-import { Repository } from "../models";
+import {
+  filterReposAction,
+  getReposFailureAction,
+  getReposLoadingAction,
+  getReposSuccessAction,
+} from "../state/popular/popular.actions";
+import { PopularState } from "../state/popular/popular.reducer";
 import { Languages } from "./Languages";
 import { Repos } from "./Repos";
 
-const languages = ["All", "Javascript", "Ruby", "Java", "CSS", "Python"];
-
 export const Popular = () => {
-  const [repos, setRepos] = useState<Repository[]>([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const repos = useSelector(
+    (state: { popularReducer: PopularState }) => state.popularReducer.repos
+  );
+  const selectedLanguage = useSelector(
+    (state: { popularReducer: PopularState }) =>
+      state.popularReducer.selectedLanguage
+  );
 
-  const [filterInput, setFilterInput] = useState("");
-  const [filteredRepos, setFilteredRepos] = useState<Repository[]>([]);
+  const loadAllRepos = async () => {
+    dispatch(getReposLoadingAction());
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedLanguage = searchParams.get("language") ?? "All";
-
-  useEffect(() => {
-    if (!selectedLanguage || !languages.includes(selectedLanguage)) {
-      setSearchParams({ language: "All" });
-    }
-  }, []);
-
-  useEffect(() => {
-    setLoading(true);
-
-    fetchRepositoriesByLanguage(selectedLanguage)
-      .then((data) => setRepos(data.items))
-      .catch((error) => setError(error.message))
-      .finally(() => setLoading(false));
-  }, [selectedLanguage]);
-
-  const showContent = () => {
-    if (loading) {
-      return <p className="pt-3 text-center">Loading ...</p>;
-    }
-
-    if (error) {
-      return <p className="pt-3 text-center font-bold text-red-600">{error}</p>;
-    }
-
-    return repos.length ? (
-      <Repos repos={filterInput ? filteredRepos : repos} />
-    ) : null;
+    await fetchRepositoriesByLanguage(selectedLanguage)
+      .then((data) => dispatch(getReposSuccessAction(data.items)))
+      .catch((error) => dispatch(getReposFailureAction(error.message)));
   };
 
   const handleSearch = debounce(async (name) => {
     if (name) {
-      setRepos(await fetchRepositoriesByName(name));
+      dispatch(getReposLoadingAction());
+
+      await fetchRepositoriesByName(name)
+        .then((data) => dispatch(getReposSuccessAction(data)))
+        .catch((error) => dispatch(getReposFailureAction(error.message)));
     } else {
-      fetchRepositoriesByLanguage(selectedLanguage)
-        .then((data) => setRepos(data.items))
-        .catch((error) => setError(error.message))
-        .finally(() => setLoading(false));
+      loadAllRepos();
     }
   }, 400);
 
   const handleFilter = debounce(async (filterInput: string) => {
-    setFilteredRepos(
-      repos.filter((repo) =>
-        repo.name.toLowerCase().includes(filterInput.toLowerCase())
-      )
-    );
-    setFilterInput(filterInput);
+    if (filterInput) {
+      dispatch(
+        filterReposAction(
+          repos.filter((repo) =>
+            repo.name.toLowerCase().includes(filterInput.toLowerCase())
+          )
+        )
+      );
+    } else {
+      loadAllRepos();
+    }
   }, 400);
 
   return (
@@ -88,12 +75,8 @@ export const Popular = () => {
           }}
         />
       </div>
-      <Languages
-        setSearchParams={setSearchParams}
-        languages={languages}
-        selectedLanguage={selectedLanguage}
-      />
-      {showContent()}
+      <Languages />
+      <Repos />
     </div>
   );
 };
